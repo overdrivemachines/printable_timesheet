@@ -21,8 +21,8 @@ body {
   
   border: 1px solid black;
   display: flex;
-  // justify-content: space-between;
   justify-content: center;
+  flex-direction: column;
 }
 
 .timesheet-container {
@@ -52,6 +52,7 @@ table, th, td, .tc {
   background: var(--color-highlight);
   font-weight: bold;
   border-width: 1px 1px 0 1px;
+  text-transform: uppercase;
 }
 
 .en {
