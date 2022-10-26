@@ -50,20 +50,30 @@ function setTimesheetBody() {
   const timesheetBody1El = document.querySelector(".timesheet-body-1");
   const timesheetBody2El = document.querySelector(".timesheet-body-2");
 
+  timesheetBody1El.textContent = "";
+  timesheetBody2El.textContent = "";
+
+  console.log(timesheetBody2El);
+
   // set a temporary date that will change from 1st to 31st in the loop
   let tempDate = new Date(date);
   tempDate.setDate(1);
   
-  // Timesheet1
-  for (let i = 1; i <= daysIntimesheetMonth; i++) {
+  // Create rows for timesheet table
+  for (let i = 1; i <= daysInTimesheetMonth; i++) {
     tempDate.setDate(i);
+    // Table row
     const tr = document.createElement("tr");
+    
+    // Data cell for date
     const tdDate = document.createElement("td");
     tdDate.textContent = i + getOrdinal(i);
+    
+    // Data cell for day
     const tdDay = document.createElement("td");
     tdDay.textContent = tempDate.toLocaleDateString('en-us', { weekday: 'short' });
-    const tdBlank = document.createElement("td");
 
+    // Append data cells to table row
     tr.appendChild(tdDate);
     tr.appendChild(tdDay);
     tr.appendChild(document.createElement("td"));
@@ -72,25 +82,26 @@ function setTimesheetBody() {
     tr.appendChild(document.createElement("td"));
     tr.appendChild(document.createElement("td"));
 
+    // Append table row to table body
     if (i <= 15) {
+      // timesheet 1 table body
       timesheetBody1El.appendChild(tr);
     } else {
+      // timesheet 2 table body
       timesheetBody2El.appendChild(tr);
     }
     
-  }
-  
-  
+  }  
 }
 
 //////////////////////////////////////////////////////////////////
 // On Load...
 const date = new Date();
+// make timecards available 5 days in advance
 date.setDate(date.getDate() + 5);
 const timesheetYear = date.getFullYear();
 const timesheetMonth = date.getMonth(); // months are 0-based
-const daysIntimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
-
+const daysInTimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
 
 setCaptions();
 setTimesheetBody();
