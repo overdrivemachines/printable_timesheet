@@ -1,0 +1,63 @@
+@import url("https://res.cloudinary.com/overdrive/raw/upload/v1666742651/fonts/odudo_mono/OdudoMono.css");
+:root {
+  --color-bg: #fff;
+  --color-text: #000;
+  --color-highlight: #aaa;
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  font-size: 16px;
+  font-family: 'OdudoMono-Bold', sans-serif;
+}
+
+.timesheets-container {
+  margin: 4em;
+  text-align: center;
+  
+  border: 1px solid black;
+  display: flex;
+  // justify-content: space-between;
+  justify-content: center;
+}
+
+.timesheet-container {
+  border: 1px solid green;
+  flex: 1;
+  padding: 1em;
+}
+
+table, th, td, .tc {
+  border: 1px solid black;
+  padding: 0.5em;
+}
+
+.timesheet {
+  width: 100%;
+}
+
+.c-date, .c-day, .c-hours {
+  width: 1px;
+}
+
+.c-time {
+  width: 10em;
+}
+
+.tc {
+  background: var(--color-highlight);
+  font-weight: bold;
+  border-width: 1px 1px 0 1px;
+}
+
+.en {
+  text-align: left;
+}
+
+.highlight, tr:nth-child(even) {
+  background: var(--color-highlight);
+}
