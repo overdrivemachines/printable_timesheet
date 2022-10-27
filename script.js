@@ -13,18 +13,17 @@ function getDaysInMonth(year, month) {
 // n can be any number
 //////////////////////////////////////////////////////////////////
 function getOrdinal(n) {
-  let ord = 'th';
+  let ord = "th";
 
   if (n % 10 == 1 && n % 100 != 11) {
-    ord = 'st';
+    ord = "st";
   } else if (n % 10 == 2 && n % 100 != 12) {
-    ord = 'nd';
+    ord = "nd";
   } else if (n % 10 == 3 && n % 100 != 13) {
-    ord = 'rd';
+    ord = "rd";
   }
   return ord;
 }
-
 
 //////////////////////////////////////////////////////////////////
 // Set Caption for timesheet
@@ -36,13 +35,18 @@ function setCaption() {
   timesheetYear = date.getFullYear();
 
   // get the month name
-  const monthName = date.toLocaleString('default', { month: 'long' });
-  
+  const monthName = date.toLocaleString("default", { month: "long" });
+
   // Set Timesheet's caption
   if (date.getDate() <= 15) {
     captionEl.textContent = monthName + " 1 - 15, " + timesheetYear;
   } else {
-    captionEl.textContent = monthName + " 16 - " + getDaysInMonth(timesheetYear, timesheetMonth) + ", " + timesheetYear;
+    captionEl.textContent =
+      monthName +
+      " 16 - " +
+      getDaysInMonth(timesheetYear, timesheetMonth) +
+      ", " +
+      timesheetYear;
   }
 }
 
@@ -60,7 +64,7 @@ function setTimesheetBody() {
   // set a temporary date that will change in the loop
   let tempDate = new Date(date);
   let endDay = daysInTimesheetMonth;
-  
+
   if (tempDate.getDate() <= 15) {
     tempDate.setDate(1);
     endDay = 15;
@@ -68,37 +72,39 @@ function setTimesheetBody() {
     tempDate.setDate(16);
     endDay = daysInTimesheetMonth;
   }
-  
+
   console.log(tempDate);
   console.log(endDay);
-
 
   // Create rows for timesheet table
   for (let i = tempDate.getDate(); i <= endDay; i++) {
     tempDate.setDate(i);
     // Table row
     const tr = document.createElement("tr");
-    
+
     // Data cell for date
     const tdDate = document.createElement("td");
     tdDate.textContent = i + getOrdinal(i);
-    
+
     // Data cell for day
     const tdDay = document.createElement("td");
-    tdDay.textContent = tempDate.toLocaleDateString('en-us', { weekday: 'short' });
+    tdDay.textContent = tempDate.toLocaleDateString("en-us", {
+      weekday: "short",
+    });
 
     // Append data cells to table row
     tr.appendChild(tdDate);
     tr.appendChild(tdDay);
-    tr.appendChild(document.createElement("td"));
-    tr.appendChild(document.createElement("td"));
-    tr.appendChild(document.createElement("td"));
-    tr.appendChild(document.createElement("td"));
-    tr.appendChild(document.createElement("td"));
 
+    let editableTD;
+    for (let i = 0; i < 5; i++) {
+      editableTD = document.createElement("td");
+      editableTD.contentEditable = true;
+      tr.appendChild(editableTD);
+    }
     // Append table row to table body
     timesheetBodyEl.appendChild(tr);
-  }  
+  }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -126,10 +132,9 @@ function currentPayPeriod() {
   date.setMonth(today.getMonth());
   date.setFullYear(today.getFullYear());
   populateTimesheet();
-  
+
   console.log(date);
 }
-
 
 //////////////////////////////////////////////////////////////////
 // Next Pay Period
