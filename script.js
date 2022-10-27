@@ -27,40 +27,48 @@ function getOrdinal(n) {
 
 
 //////////////////////////////////////////////////////////////////
-// Set Captions for both timesheets
+// Set Caption for timesheet
 //////////////////////////////////////////////////////////////////
-function setCaptions() {
-  const caption1El = document.querySelector(".timesheet-caption-1");
-  const caption2El = document.querySelector(".timesheet-caption-2");
+function setCaption() {
+  const captionEl = document.querySelector(".timesheet-caption");
 
   // get the month name
   const monthName = date.toLocaleString('default', { month: 'long' });
   
-  // Set Timesheet 1's caption
-  caption1El.textContent = monthName + " 1 - 15, " + timesheetYear;
-
-  // Set Timesheet 2's caption
-  caption2El.textContent = monthName + " 16 - " + getDaysInMonth(timesheetYear, timesheetMonth) + ", " + timesheetYear;
+  // Set Timesheet's caption
+  if (date.getDate() <= 15) {
+    captionEl.textContent = monthName + " 1 - 15, " + timesheetYear;
+  } else {
+    captionEl.textContent = monthName + " 16 - " + getDaysInMonth(timesheetYear, timesheetMonth) + ", " + timesheetYear;
+  }
 }
 
 //////////////////////////////////////////////////////////////////
 // Set Timesheet Body
 //////////////////////////////////////////////////////////////////
 function setTimesheetBody() {
-  const timesheetBody1El = document.querySelector(".timesheet-body-1");
-  const timesheetBody2El = document.querySelector(".timesheet-body-2");
+  const timesheetBodyEl = document.querySelector(".timesheet-body");
 
-  timesheetBody1El.textContent = "";
-  timesheetBody2El.textContent = "";
+  timesheetBodyEl.textContent = "";
 
-  console.log(timesheetBody2El);
 
-  // set a temporary date that will change from 1st to 31st in the loop
+  // set a temporary date that will change in the loop
   let tempDate = new Date(date);
-  tempDate.setDate(1);
+  let endDate = daysInTimesheetMonth;
   
+  if (tempDate.getDate() <= 15) {
+    tempDate.setDate(1);
+    endDate = 15;
+  } else {
+    tempDate.setDate(16);
+    endDate = daysInTimesheetMonth;
+  }
+  
+  
+
+
   // Create rows for timesheet table
-  for (let i = 1; i <= daysInTimesheetMonth; i++) {
+  for (let i = tempDate.getDate(); i <= daysInTimesheetMonth; i++) {
     tempDate.setDate(i);
     // Table row
     const tr = document.createElement("tr");
@@ -85,10 +93,8 @@ function setTimesheetBody() {
     // Append table row to table body
     if (i <= 15) {
       // timesheet 1 table body
-      timesheetBody1El.appendChild(tr);
+      timesheetBodyEl.appendChild(tr);
     } else {
-      // timesheet 2 table body
-      timesheetBody2El.appendChild(tr);
     }
     
   }  
@@ -97,11 +103,11 @@ function setTimesheetBody() {
 //////////////////////////////////////////////////////////////////
 // On Load...
 const date = new Date();
-// make timecards available 5 days in advance
-date.setDate(date.getDate() + 5);
+// make timecards available 3 days in advance
+date.setDate(date.getDate() + 3);
 const timesheetYear = date.getFullYear();
 const timesheetMonth = date.getMonth(); // months are 0-based
 const daysInTimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
 
-setCaptions();
+setCaption();
 setTimesheetBody();
