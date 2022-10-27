@@ -32,6 +32,9 @@ function getOrdinal(n) {
 function setCaption() {
   const captionEl = document.querySelector(".timesheet-caption");
 
+  timesheetMonth = date.getMonth();
+  timesheetYear = date.getFullYear();
+
   // get the month name
   const monthName = date.toLocaleString('default', { month: 'long' });
   
@@ -50,25 +53,28 @@ function setTimesheetBody() {
   const timesheetBodyEl = document.querySelector(".timesheet-body");
 
   timesheetBodyEl.textContent = "";
-
+  timesheetYear = date.getFullYear();
+  timesheetMonth = date.getMonth();
+  daysInTimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
 
   // set a temporary date that will change in the loop
   let tempDate = new Date(date);
-  let endDate = daysInTimesheetMonth;
+  let endDay = daysInTimesheetMonth;
   
   if (tempDate.getDate() <= 15) {
     tempDate.setDate(1);
-    endDate = 15;
+    endDay = 15;
   } else {
     tempDate.setDate(16);
-    endDate = daysInTimesheetMonth;
+    endDay = daysInTimesheetMonth;
   }
   
-  
+  console.log(tempDate);
+  console.log(endDay);
 
 
   // Create rows for timesheet table
-  for (let i = tempDate.getDate(); i <= daysInTimesheetMonth; i++) {
+  for (let i = tempDate.getDate(); i <= endDay; i++) {
     tempDate.setDate(i);
     // Table row
     const tr = document.createElement("tr");
@@ -91,23 +97,90 @@ function setTimesheetBody() {
     tr.appendChild(document.createElement("td"));
 
     // Append table row to table body
-    if (i <= 15) {
-      // timesheet 1 table body
-      timesheetBodyEl.appendChild(tr);
-    } else {
-    }
-    
+    timesheetBodyEl.appendChild(tr);
   }  
+}
+
+//////////////////////////////////////////////////////////////////
+// Previous Pay Period
+// Called when Previous button is clicked
+//////////////////////////////////////////////////////////////////
+function previousPayPeriod() {
+  if (date.getDate() >= 16) {
+    date.setDate(1);
+  } else {
+    date.setDate(0);
+  }
+  populateTimesheet();
+  console.log(date);
+}
+
+//////////////////////////////////////////////////////////////////
+// Current Pay Period
+// Called when Current button is clicked
+//////////////////////////////////////////////////////////////////
+
+function currentPayPeriod() {
+  const today = new Date();
+  date.setDate(today.getDate());
+  date.setMonth(today.getMonth());
+  date.setFullYear(today.getFullYear());
+  populateTimesheet();
+  
+  console.log(date);
+}
+
+
+//////////////////////////////////////////////////////////////////
+// Next Pay Period
+// Called when Next button is clicked
+//////////////////////////////////////////////////////////////////
+function nextPayPeriod() {
+  if (date.getDate() >= 16) {
+    date.setDate(32);
+  } else {
+    date.setDate(16);
+  }
+  populateTimesheet();
+  console.log(date);
+}
+
+//////////////////////////////////////////////////////////////////
+// Print Timesheet
+// Called when Print button is clicked
+//////////////////////////////////////////////////////////////////
+function printTimesheet() {
+  window.print();
+}
+
+//////////////////////////////////////////////////////////////////
+// Populate Timesheet
+// Fills the TImesheet Caption and Table
+//////////////////////////////////////////////////////////////////
+function populateTimesheet() {
+  setCaption();
+  setTimesheetBody();
 }
 
 //////////////////////////////////////////////////////////////////
 // On Load...
 const date = new Date();
 // make timecards available 3 days in advance
-date.setDate(date.getDate() + 3);
-const timesheetYear = date.getFullYear();
-const timesheetMonth = date.getMonth(); // months are 0-based
-const daysInTimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
+// date.setDate(date.getDate() + 3);
+let timesheetYear = date.getFullYear();
+let timesheetMonth = date.getMonth(); // months are 0-based
+let daysInTimesheetMonth = getDaysInMonth(timesheetYear, timesheetMonth);
 
-setCaption();
-setTimesheetBody();
+// Actions
+const previousBtn = document.querySelector(".btn-previous");
+const currentBtn = document.querySelector(".btn-current");
+const nextBtn = document.querySelector(".btn-next");
+const printBtn = document.querySelector(".btn-print");
+
+// Event Listeners
+previousBtn.addEventListener("click", previousPayPeriod);
+currentBtn.addEventListener("click", currentPayPeriod);
+nextBtn.addEventListener("click", nextPayPeriod);
+printBtn.addEventListener("click", printTimesheet);
+
+populateTimesheet();
